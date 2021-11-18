@@ -6,6 +6,7 @@
 package co.edu.unipiloto.testws.services;
 
 import co.edu.unipiloto.testws.Persona;
+import co.edu.unipiloto.testws.Salary;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 @Path("service")
 public class Servicio {
     private static Map<Integer,Persona> persons = new HashMap<Integer,Persona>();
+    private static final int MINIMUM_SALARY=908000;
     
     static {
         for (int i = 0; i < 10; i++) {
@@ -39,6 +41,7 @@ public class Servicio {
             person.setId(id);
             person.setFullName("My wonderfull Person " + id);
             person.setAge(new Random().nextInt(40) + 1);
+            person.setSalary(person.getAge()*MINIMUM_SALARY/3);
             persons.put(id, person);
         }
         
@@ -67,5 +70,32 @@ public class Servicio {
     @Produces(MediaType.APPLICATION_JSON)
     public Persona getPersonByIdJson(@PathParam("id") int id) {
         return persons.get(id);
+    }
+    
+    @GET
+    @Path("/getAverageSalaryInXML")
+    @Produces(MediaType.APPLICATION_XML)
+    public Salary getAverageSalary(){
+        int avSalary=0;
+        for (Persona persona : persons.values()) {
+            avSalary+=persona.getSalary();
+        }
+        avSalary=avSalary/persons.size();
+        Salary salary=new Salary();
+        salary.setTotal(avSalary);
+        return salary;
+    }
+    
+    @GET
+    @Path("/getSalarySum")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Salary getSalarySum() {
+        int sumSalary=0;
+        for (Persona persona : persons.values()) {
+            sumSalary+=persona.getSalary();
+        }
+        Salary salary=new Salary();
+        salary.setTotal(sumSalary);
+        return salary;
     }
 }

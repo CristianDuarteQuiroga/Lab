@@ -15,12 +15,22 @@ import javax.xml.bind.annotation.XmlType;
  * @author JEFRY
  */
 @XmlRootElement(name = "person")
-@XmlType(propOrder = {"id","fullName","age"})
+@XmlType(propOrder = {"id","fullName","age","salary"})
 public class Persona implements Serializable{
     private static final long serialVersionUID=1L;
     private int id;
     private String fullName;
     private int age;
+    private int salary;
+
+    @XmlElement
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
     
     
 
